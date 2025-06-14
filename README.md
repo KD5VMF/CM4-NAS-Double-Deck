@@ -156,11 +156,8 @@ Press `Ctrl+C` in the terminal.
 
 ### 🚀 Auto-Start the Official Demo on Boot (Optional)
 
-To run the official LCD script on boot, add this before `exit 0` in `/etc/rc.local`:
+Follow the commands above to make a service.
 
-```bash
-cd /home/pi/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
-sudo python3 main.py &
 ```
 
 ---
