@@ -5,15 +5,16 @@ This repository contains a **backup** of the official Waveshare demo so you can 
 
 ## 📥 1. Download & Use Backup File
 
-- **Filename:** `waveshare_demo_backup.zip`  
-- **Located in this repo:** [./waveshare_demo_backup.zip](./waveshare_demo_backup.zip)
+- **Filename:** `CM4-NAS-Double-Deck_Demo.zip`  
+- **Located in this repo:** [./CM4-NAS-Double-Deck_Demo.zip](./CM4-NAS-Double-Deck_Demo.zip)
 - **Installation steps:**
   ```bash
-  wget https://github.com/KD5VMF/CM4-NAS-Double-Deck---Waveshare-/raw/main/waveshare_demo_backup.zip
-  unzip waveshare_demo_backup.zip
+  wget https://github.com/KD5VMF/CM4-NAS-Double-Deck---Waveshare-/raw/main/CM4-NAS-Double-Deck_Demo.zip
+  unzip CM4-NAS-Double-Deck_Demo.zip
   cd CM4-NAS-Double-Deck_Demo/RaspberryPi/example
   python3 main.py
   ```
+
 - **Auto-start on boot:** Add before `exit 0` in `/etc/rc.local`:
   ```bash
   cd /home/pi/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
@@ -63,13 +64,13 @@ sudo hwclock -r
 Install dependencies:
 ```bash
 sudo apt update
-sudo apt install python3-numpy python3-pil python3-psutil -y
+sudo apt install python3-spidev python3-numpy python3-pil python3-psutil -y
 ```
 
 Download and run the demo (either backup or official):
 ```bash
-wget <URL-from-01-or-02>
-unzip *.zip
+wget https://github.com/KD5VMF/CM4-NAS-Double-Deck---Waveshare-/raw/main/CM4-NAS-Double-Deck_Demo.zip
+unzip CM4-NAS-Double-Deck_Demo.zip
 cd CM4-NAS-Double-Deck_Demo/RaspberryPi/example
 python3 main.py
 ```
