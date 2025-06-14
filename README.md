@@ -54,9 +54,31 @@ sudo apt install python3-spidev python3-numpy python3-pil python3-psutil -y
 
 ## 🔗 3. Official Waveshare LCD Demo Download (Alternate Source)
 
-You can also get the official demo from Waveshare (same contents):
+You can also get the **official demo** from Waveshare’s website. The contents are the same as the backup provided in this repository.
 
-[https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip](https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip)
+### 🔽 Download and Test the Official Demo
+
+```bash
+wget https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip
+unzip CM4-NAS-Double-Deck_Demo.zip
+cd CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+python3 main.py
+```
+
+### 🛑 To Stop the Demo
+
+Press `Ctrl+C` in the terminal.
+
+---
+
+### 🚀 Auto-Start the Official Demo on Boot (Optional)
+
+To run the official LCD script on boot, add this before `exit 0` in `/etc/rc.local`:
+
+```bash
+cd /home/pi/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+sudo python3 main.py &
+```
 
 ---
 
