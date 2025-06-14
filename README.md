@@ -285,7 +285,7 @@ We have not yet changed logic behavior, but we identified areas improved in our 
 
 You are encouraged to continue improving the logic, but this version is stable and runs safely.
 
-🆕 The cleaned file is named `image_cleaned.py` in this repo.
+🆕 The cleaned file is named `image.py` in this repo.
 
 ---
 
