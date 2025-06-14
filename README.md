@@ -1,73 +1,16 @@
 
 # CM4-NAS-Double-Deck Setup Guide
 
-This repository contains a **backup** of the official Waveshare demo so you can continue setup even if the original file becomes unavailable.
-
-## 📥 1. Download & Use Backup File
-
-- **Filename:** `CM4-NAS-Double-Deck_Demo.zip`  
-- **Located in this repo:** [./CM4-NAS-Double-Deck_Demo.zip](./CM4-NAS-Double-Deck_Demo.zip)
-- **Installation steps:**
-  ```bash
-  wget https://github.com/KD5VMF/CM4-NAS-Double-Deck---Waveshare-/raw/main/CM4-NAS-Double-Deck_Demo.zip
-  unzip CM4-NAS-Double-Deck_Demo.zip
-  cd CM4-NAS-Double-Deck_Demo/RaspberryPi/example
-  python3 main.py
-  ```
-
-- **Auto-start on boot:** Add before `exit 0` in `/etc/rc.local`:
-  ```bash
-  cd /home/pi/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
-  sudo python3 main.py &
-  ```
+This guide helps you fully configure your Raspberry Pi CM4 NAS in the Waveshare CM4-NAS-Double-Deck enclosure — including LCD, RTC, USB, buttons, and OpenMediaVault.
 
 ---
 
-## 🔗 2. Official Waveshare Download
+## 📺 1. LCD Display Demo Setup (Backup File Provided)
 
-Prefer the original? You can still download directly from Waveshare:
+This repository includes a **backup of the Waveshare LCD demo**. This is only the graphical Python script that shows real-time info (like temperature and disk usage) on the attached LCD.
 
-[https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip](https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip)
+### 🔽 Download and Test the LCD Demo
 
-Check the demo contents and follow the same installation steps in section 1.
-
----
-
-## 🧰 Setup Instructions
-
-### 1. Flash Raspberry Pi OS Lite (64-bit)
-- Use **Raspberry Pi Imager**
-- Enable SSH, set hostname, configure Wi‑Fi if needed
-
-### 2. Enable Interfaces (SPI, USB, RTC)
-
-Edit `/boot/config.txt`:
-```ini
-# Enable SPI for LCD
-dtparam=spi=on
-
-# Enable USB 2.0 ports
-dtoverlay=dwc2,dr_mode=host
-
-# Enable I2C RTC (PCF85063A)
-dtoverlay=i2c-rtc,pcf85063a
-```
-
-Reboot and verify RTC:
-```bash
-sudo reboot
-sudo hwclock -r
-```
-
-### 3. Install LCD Display Script
-
-Install dependencies:
-```bash
-sudo apt update
-sudo apt install python3-spidev python3-numpy python3-pil python3-psutil -y
-```
-
-Download and run the demo (either backup or official):
 ```bash
 wget https://github.com/KD5VMF/CM4-NAS-Double-Deck---Waveshare-/raw/main/CM4-NAS-Double-Deck_Demo.zip
 unzip CM4-NAS-Double-Deck_Demo.zip
@@ -75,57 +18,142 @@ cd CM4-NAS-Double-Deck_Demo/RaspberryPi/example
 python3 main.py
 ```
 
-### 4. Auto-Start on Boot
+### 🛑 To Stop the Demo
 
-Edit `/etc/rc.local` **before** `exit 0`:
+Press `Ctrl+C` in the terminal.
+
+---
+
+### 🚀 Auto-Start LCD on Boot (Optional)
+
+To auto-run the display program at boot:
+
+```bash
+sudo nano /etc/rc.local
+```
+
+Add **before** `exit 0`:
+
 ```bash
 cd /home/pi/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
 sudo python3 main.py &
 ```
 
-### 5. Install OpenMediaVault (OMV)
+---
+
+## 🧾 2. Install Dependencies
+
+Install the required Python libraries for the LCD demo to work:
+
+```bash
+sudo apt update
+sudo apt install python3-spidev python3-numpy python3-pil python3-psutil -y
+```
+
+---
+
+## 🔗 3. Official Waveshare LCD Demo Download (Alternate Source)
+
+You can also get the official demo from Waveshare (same contents):
+
+[https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip](https://www.waveshare.net/w/upload/7/73/CM4-NAS-Double-Deck_Demo.zip)
+
+---
+
+## 🗄 4. Install OpenMediaVault (NAS GUI)
+
+To install OMV (web-based NAS management):
 
 ```bash
 wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
 ```
-Access via browser: `http://<your-device-ip>/`
 
-### 6. Networking
+Then open the browser and go to:
 
-- **Ethernet:** Plug and go  
-- **Wi‑Fi:**  
-  ```bash
-  sudo raspi-config
-  # Navigate to Network Options → Wi‑Fi
-  ```  
-  Or set manually in `/etc/wpa_supplicant/wpa_supplicant.conf`:
-  ```conf
-  network={
+```
+http://<your-device-ip>/
+```
+
+---
+
+## ⚙️ 5. Enable Interfaces (RTC, USB, SPI, I2C, Buttons)
+
+Edit the config file:
+
+```bash
+sudo nano /boot/config.txt
+```
+
+Add the following lines:
+
+```ini
+# Enable SPI for LCD
+dtparam=spi=on
+
+# Enable USB 2.0 ports
+dtoverlay=dwc2,dr_mode=host
+
+# Enable I2C RTC
+dtoverlay=i2c-rtc,pcf85063a
+```
+
+### 🔁 Reboot and Check RTC
+
+```bash
+sudo reboot
+sudo hwclock -r
+```
+
+---
+
+## 🌐 6. Networking Setup
+
+### Ethernet  
+Just plug in the cable.
+
+### Wi-Fi  
+Use `raspi-config`:
+
+```bash
+sudo raspi-config
+# Go to Network Options → Wi-Fi
+```
+
+Or manually edit:
+
+```bash
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+Add your network info:
+
+```conf
+network={
     ssid="YourWiFiSSID"
     psk="YourWiFiPassword"
-  }
-  ```
+}
+```
 
 ---
 
 ## ✅ Summary
 
-| Feature               | Result |
+| Feature               | Status |
 |-----------------------|:------:|
-| Raspberry Pi OS       | ✅     |
+| Raspberry Pi OS Lite  | ✅     |
+| LCD Info Display      | ✅     |
 | RTC (PCF85063A)       | ✅     |
 | USB/SPI/I2C enabled   | ✅     |
-| LCD Display           | ✅     |
-| NAS via OMV           | ✅     |
-| Networking            | ✅     |
+| OMV Installed         | ✅     |
+| Networking (LAN/Wi-Fi)| ✅     |
 
 ---
 
 ### ℹ️ Attribution & License
 
-- Original demo package © Waveshare (licensed under their terms).  
-- This repo provides a **backup copy** for convenience.
+- Original demo © Waveshare  
+- This repository includes a backup copy of the LCD display demo for educational and restoration purposes.
 
 ---
 
-For questions or issues, feel free to open an issue or fork the project. Enjoy your CM4 NAS setup! 🚀
+For questions or contributions, open an issue or pull request. Enjoy your Raspberry Pi CM4 NAS! 🚀
