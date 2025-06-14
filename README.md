@@ -126,19 +126,6 @@ systemctl status cm4lcd.service
 
 You’re good to go if it shows the script running!
 
-To auto-run the display program at boot:
-
-```bash
-sudo nano /etc/rc.local
-```
-
-Add **before** `exit 0`:
-
-```bash
-cd /home/pi/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
-sudo python3 main.py &
-```
-
 ---
 
 ## 🔗 2. Official Waveshare LCD Demo Download (Alternate Source)
