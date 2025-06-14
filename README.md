@@ -145,18 +145,6 @@ network={
 }
 ```
 
---------------------------|:------:|
-| Raspberry Pi OS Lite  | ✅     |
-| LCD Info Display      | ✅     |
-| RTC (PCF85063A)       | ✅     |
-| USB/SPI/I2C enabled   | ✅     |
-| OMV Installed         | ✅     |
-| Networking (LAN/Wi-Fi)| ✅     |
-
----
-
----
-
 ## 🗄 Final Step: Install OpenMediaVault (NAS GUI)
 
 To install OMV (web-based NAS management):
