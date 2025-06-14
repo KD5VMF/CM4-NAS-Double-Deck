@@ -3,7 +3,7 @@
 
 This guide helps you fully configure your Raspberry Pi CM4 NAS in the Waveshare CM4-NAS-Double-Deck enclosure — including LCD, RTC, USB, buttons, and OpenMediaVault.
 
-The `image.py` file in this repository and within the zip file has been fully reviewed and cleaned compared to the original Waveshare version: READ BELOW FOR MORE.
+The `image.py` file in this repository and within the zip file have been fully reviewed and cleaned compared to the original Waveshare version: READ BELOW FOR MORE.
 
 ---
 
@@ -269,7 +269,7 @@ http://<your-device-ip>/
 
 ## 🧹 LCD Demo Code Cleanup & Enhancements
 
-The `image.py` file in this repository and within the zip file has been fully reviewed and cleaned compared to the original Waveshare version:
+The `image.py` file in this repository and within the zip file have been fully reviewed and cleaned compared to the original Waveshare version:
 
 ### ✅ 1. Language Cleanup
 We removed or translated all non-English comments, originally written in Chinese:
