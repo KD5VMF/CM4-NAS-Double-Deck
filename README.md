@@ -27,6 +27,7 @@ Replace `<your-pi-ip-address>` with the actual IP shown by your router or networ
 
 This repository includes a **backup of the Waveshare LCD demo**. This is only the graphical Python script that shows real-time info (like temperature and disk usage) on the attached LCD.
 
+The image.py file in this repository has been fully reviewed and cleaned compared to the original Waveshare version: See below for changes.
 ### 🔧 Install Python Dependencies First
 
 ```bash
