@@ -112,21 +112,6 @@ You should see `Active: active (running)`. If you see `status=217/USER` or `stat
 
 ---
 
-### 🔁 4. Verify Auto-Start on Reboot
-
-```bash
-sudo reboot
-```
-
-After rebooting, run:
-
-```bash
-systemctl status cm4lcd.service
-```
-
-You’re good to go if it shows the script running!
-
----
 
 ## 🔗 2. Official Waveshare LCD Demo Download (Alternate Source)
 
