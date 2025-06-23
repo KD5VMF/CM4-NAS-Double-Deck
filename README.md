@@ -113,7 +113,7 @@ You should see `Active: active (running)`. If you see `status=217/USER` or `stat
 ---
 
 
-## 🔗 2. Official Waveshare LCD Demo Download (Alternate Source)
+## 🔗 Official Waveshare LCD Demo Download (Alternate Source)
 
 You can also get the **official demo** from Waveshare’s website. The contents are the same as the backup provided in this repository.
 
