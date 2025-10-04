@@ -1,0 +1,186 @@
+# CM4 NAS Front Display Profile
+version: 1
+name: waveshare_cm4_nas_display
+
+device:
+  model: Raspberry Pi Compute Module 4
+  base_os:
+    name: Raspberry Pi OS (Debian Trixie/Bookworm era)
+    arch: arm64
+  hostname: nas
+  notes:
+    - Waveshare CM4 SSD NAS front panel with 2" LCD and single user button
+    - Backlight is on GPIO18
+    - SPI and I2C enabled via /boot/firmware/config.txt (dtparam=spi=on, dtparam=i2c_arm=on)
+
+display:
+  panel:
+    controller: ST7789
+    width: 240        # logical rendering width
+    height: 320       # logical rendering height
+    rotation_uses_image_rotate: true   # Waveshare demo rotates the PIL image, not the controller
+    default_rotate_180: true           # matches vendor demo orientation
+    color_order: BGR                    # informational; not directly set in Waveshare lib
+    offsets:
+      left: 0
+      top: 0
+  driver:
+    type: waveshare_lcd_2inch        # vendor library; NOT the pimoroni st7789 module
+    module_path: /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/lib/LCD_2inch.py
+    init_method: Init
+    show_method: ShowImage
+    clear_method: clear
+
+wiring:
+  spi:
+    bus: 0
+    # CE0 is standard for this board; if rendering fails, CE1 can be tried by editing lcdconfig.py
+    chip_select: 0
+    device_node: /dev/spidev0.0
+    speed_hz_default: 40000000
+    speed_hz_alternative_safe: 12000000
+  pins:
+    dc: 25
+    rst: 27
+    bl: 18
+    button_user: 20   # User_key in demo (optional; gpiozero Button)
+
+env:
+  venv:
+    path: /home/sysop/ws-demo-venv
+    python: system-site-packages-enabled: true
+    packages_apt:
+      - python3-venv
+      - python3-gpiozero
+      - python3-libgpiod
+      - python3-lgpio
+      - python3-spidev
+      - fonts-dejavu
+    packages_pip:
+      - pillow
+  variables:
+    GPIOZERO_PIN_FACTORY: lgpio
+    PYTHONPATH:
+      - /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi
+      - /usr/lib/python3/dist-packages
+
+paths:
+  repo_root: /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi
+  example_dir: /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+  fonts:
+    - /usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf
+    - /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/Font/Font02.ttf
+    - /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/Font/Font01.ttf
+
+known_good:
+  demo_command: |
+    source /home/sysop/ws-demo-venv/bin/activate
+    export GPIOZERO_PIN_FACTORY=lgpio
+    export PYTHONPATH=/home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi:/usr/lib/python3/dist-packages
+    cd /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+    python main.py
+  hello_world_script: /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example/hello_ws.py
+  hello_world_rotate_180: true
+
+backlight:
+  line: 18
+  control: libgpiod_v2
+  quick_on: |
+    for chip in /dev/gpiochip*; do
+      if sudo gpioset --chip "$chip" 18=1 2>/dev/null; then break; fi
+    done
+  quick_off: |
+    for chip in /dev/gpiochip*; do
+      if sudo gpioset --chip "$chip" 18=0 2>/dev/null; then break; fi
+    done
+  hold_off_service:
+    script_path: /usr/local/bin/nas_bl_off.py
+    service_name: nas-bl-off.service
+    install_script: |
+      sudo tee /usr/local/bin/nas_bl_off.py >/dev/null <<'PY'
+      #!/usr/bin/env python3
+      import time, glob, gpiod
+      for dev in sorted(glob.glob("/dev/gpiochip*")):
+          try:
+              chip = gpiod.Chip(dev)
+              req = chip.request_lines(
+                  consumer="nas-bl-off",
+                  config={18: gpiod.LineSettings(
+                      direction=gpiod.LineDirection.OUTPUT,
+                      drive=gpiod.LineDrive.PUSH_PULL,
+                      output_value=gpiod.LineValue.INACTIVE)}
+              )
+              while True: time.sleep(3600)
+          except Exception:
+              continue
+      PY
+      sudo chmod +x /usr/local/bin/nas_bl_off.py
+      sudo tee /etc/systemd/system/nas-bl-off.service >/dev/null <<'EOF'
+      [Unit]
+      Description=Hold Waveshare NAS LCD Backlight OFF (GPIO18)
+      After=multi-user.target
+      [Service]
+      Type=simple
+      ExecStart=/usr/local/bin/nas_bl_off.py
+      Restart=on-failure
+      [Install]
+      WantedBy=multi-user.target
+      EOF
+      sudo systemctl daemon-reload
+      sudo systemctl enable --now nas-bl-off.service
+
+run:
+  open_env: |
+    source /home/sysop/ws-demo-venv/bin/activate
+    export GPIOZERO_PIN_FACTORY=lgpio
+    export PYTHONPATH=/home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi:/usr/lib/python3/dist-packages
+  demo: |
+    cd /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+    python main.py
+  hello_world: |
+    cd /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+    ./hello_ws.py
+
+systemd:
+  # Optional: autostart a chosen script at boot (hello world as example)
+  service_name: nas-display.service
+  script: /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example/hello_ws.py
+  unit: |
+    [Unit]
+    Description=Waveshare CM4 NAS Front LCD
+    After=network-online.target
+    Wants=network-online.target
+    [Service]
+    User=sysop
+    WorkingDirectory=/home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example
+    Environment=VIRTUAL_ENV=/home/sysop/ws-demo-venv
+    Environment=PATH=/home/sysop/ws-demo-venv/bin:/usr/bin:/bin
+    Environment=GPIOZERO_PIN_FACTORY=lgpio
+    Environment=PYTHONPATH=/home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi:/usr/lib/python3/dist-packages
+    ExecStart=/home/sysop/ws-demo-venv/bin/python /home/sysop/CM4-NAS-Double-Deck_Demo/RaspberryPi/example/hello_ws.py
+    Restart=on-failure
+    RestartSec=2
+    [Install]
+    WantedBy=multi-user.target
+
+troubleshooting:
+  - symptom: "Screen flashes, stays black"
+    steps:
+      - "Ensure using vendor driver (LCD_2inch) and demo path on PYTHONPATH."
+      - "Try CE1: edit lib/lcdconfig.py SpiDev(0,0) -> SpiDev(0,1)."
+      - "Lower SPI speed to 12MHz in lib/lcdconfig.py (spi_freq=12000000)."
+  - symptom: "Image upside-down"
+    steps:
+      - "hello_ws.py -> set ROTATE_180 = false OR rotate the PIL image 0°."
+  - symptom: "Fonts missing"
+    steps:
+      - "Install fonts: sudo apt install fonts-dejavu"
+      - "Fallback to ../Font/Font02.ttf or load_default()."
+  - symptom: "Backlight won’t change"
+    steps:
+      - "Use gpioset v2 form with --chip: e.g., sudo gpioset --chip /dev/gpiochip0 18=1"
+
+notes:
+  keep:
+    - "We purposely avoid RPi.GPIO. gpiozero uses lgpio backend."
+    - "When using this profile, assume vendor demo environment unless stated otherwise."
