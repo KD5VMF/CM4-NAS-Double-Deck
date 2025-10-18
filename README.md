@@ -1,6 +1,8 @@
 
 # CM4-NAS-Double-Deck Setup Guide
 
+As of 10/18/2025 - The below was tested and used with Bookworm.
+
 This guide helps you fully configure your Raspberry Pi CM4 NAS in the Waveshare CM4-NAS-Double-Deck enclosure — including LCD, RTC, USB, buttons, and OpenMediaVault.
 
 The `image.py` file in this repository and within the zip file have been fully reviewed and cleaned compared to the original Waveshare version: READ BELOW FOR MORE.
