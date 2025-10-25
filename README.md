@@ -42,6 +42,8 @@ sudo apt install python3-spidev python3-numpy python3-pil python3-psutil -y
 
 ### 🔽 Download and Test the LCD Demo (Backup)
 
+Use: sudo raspi-config and enable SPI
+
 ```bash
 wget https://github.com/KD5VMF/CM4-NAS-Double-Deck---Waveshare-/raw/main/CM4-NAS-Double-Deck_Demo.zip
 unzip CM4-NAS-Double-Deck_Demo.zip
