@@ -1,0 +1,17 @@
+[Unit]
+Description=CM4 NAS Pretty LCD Dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=__USER__
+WorkingDirectory=/opt/cm4lcd
+EnvironmentFile=-/etc/default/cm4lcd_pretty
+ExecStart=/usr/bin/python3 -u /opt/cm4lcd/pretty_dashboard.py
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
