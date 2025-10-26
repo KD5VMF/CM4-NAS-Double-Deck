@@ -1,21 +1,31 @@
-# CM4-NAS-Double-Deck Setup Guide
+# CM4-NAS-Double-Deck — NEW-DISPLAY (Bookworm)
 
-> **Tested on Raspberry Pi OS (Debian 12) — Bookworm.**  
-> This guide covers LCD, RTC, USB, buttons, a modern LCD dashboard, and optional OpenMediaVault.
-
-- `NEW-DISPLAY/` — modern, pretty LCD dashboard with service + hardening scripts (Bookworm only).
-- **Backup** of the original Waveshare LCD demo is also referenced for users who want the stock example.
+> **Tested & supported on Raspberry Pi OS (Debian 12) — Bookworm.**  
+> This project provides a modern, flicker-free **LCD dashboard** for the Waveshare CM4-NAS-Double-Deck, plus **Bookworm lock** (no accidental release upgrade) and an **OS-in-RAM overlay** to protect against power loss. It also includes an optional backup of the **original Waveshare demo**.
 
 ---
 
-## 🔐 Access your CM4 NAS
+## Table of Contents
 
-After flashing Raspberry Pi OS **Lite (Bookworm)**:
+- [What You Get](#what-you-get)
+- [Hardware & OS Prereqs](#hardware--os-prereqs)
+- [Quick Start (Recommended Dashboard)](#quick-start-recommended-dashboard)
+- [Configuration File](#configuration-file)
+- [Service Management](#service-management)
+- [System Hardening (Lock to Bookworm + OS in RAM)](#system-hardening-lock-to-bookworm--os-in-ram)
+- [RAID1 Setup for /srv/nas (Optional)](#raid1-setup-for-srvnas-optional)
+- [Original Waveshare LCD Demo (Optional Backup)](#original-waveshare-lcd-demo-optional-backup)
+- [Enable Interfaces (SPI / USB / I2C / RTC)](#enable-interfaces-spi--usb--i2c--rtc)
+- [Networking (LAN & Wi-Fi)](#networking-lan--wi-fi)
+- [OpenMediaVault (Optional NAS GUI)](#openmediavault-optional-nas-gui)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [License & Credits](#license--credits)
 
-1. In Raspberry Pi Imager → **Advanced Options**, enable **SSH** and set user/password, **or**
-2. Create an empty file named `ssh` on the boot partition.
+---
 
-Then SSH in from your PC:
+## What You Get
 
-```bash
-ssh pi@<your-pi-ip-address>
+**Folder structure (inside this repo):**
+
