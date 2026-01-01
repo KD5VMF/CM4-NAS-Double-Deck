@@ -1,0 +1,12 @@
+[Unit]
+Description=CM4-AP network prep (assign IP to wlan0, enable forwarding/NAT)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/cm4ap-net.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=File Browser (CM4-AP Web File Portal)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/cm4ap/filebrowser.env
+ExecStart=/usr/local/bin/filebrowser -d ${DB:-/etc/filebrowser/filebrowser.db}
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

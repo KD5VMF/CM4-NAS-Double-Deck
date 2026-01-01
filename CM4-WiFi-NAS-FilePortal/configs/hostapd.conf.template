@@ -1,0 +1,23 @@
+# hostapd.conf.template
+# This file is rendered by install_cm4_wifi_nas.sh into /etc/hostapd/hostapd.conf
+
+interface=wlan0
+driver=nl80211
+
+ssid={{SSID}}
+hw_mode=g
+channel={{CHANNEL}}
+country_code={{COUNTRY}}
+ieee80211n=1
+wmm_enabled=1
+auth_algs=1
+ignore_broadcast_ssid=0
+
+# WPA2 only (most compatible)
+wpa=2
+wpa_passphrase={{PASSPHRASE}}
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+
+# Optional: help older/finicky clients
+# ieee80211w=0
